@@ -1,0 +1,298 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Anatomy Click Challenge</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #222;
+            text-align: center;
+        }
+
+        header {
+            background: #ffffff;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            margin: 0 0 10px;
+            font-size: 32px;
+        }
+
+        #question {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .game-container {
+            max-width: 900px;
+            margin: 25px auto;
+            padding: 20px;
+        }
+
+        #image-container {
+            position: relative;
+            display: inline-block;
+            max-width: 100%;
+        }
+
+        #anatomy-image {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.2);
+        }
+
+        /*
+            Invisible clickable areas.
+
+            Each area is positioned using percentages so the
+            game works on different screen sizes.
+        */
+
+        .click-area {
+            position: absolute;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        /*
+            Turn this on temporarily if you want to see
+            where the clickable areas are.
+
+            Change opacity from 0 to 0.3 while testing.
+        */
+
+        .click-area.debug {
+            background: rgba(255, 0, 0, 0.3);
+        }
+
+        #feedback {
+            min-height: 45px;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 15px;
+        }
+
+        .correct {
+            color: green;
+        }
+
+        .wrong {
+            color: red;
+        }
+
+        button {
+            border: none;
+            padding: 12px 25px;
+            font-size: 17px;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #333;
+            color: white;
+            margin: 5px;
+        }
+
+        button:hover {
+            background: #555;
+        }
+
+        #next-button {
+            display: none;
+        }
+
+        .progress {
+            width: 90%;
+            max-width: 500px;
+            height: 12px;
+            background: #ddd;
+            border-radius: 10px;
+            margin: 15px auto;
+            overflow: hidden;
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #333;
+            transition: width 0.3s;
+        }
+
+        #start-screen {
+            margin-top: 100px;
+        }
+
+        #game-screen {
+            display: none;
+        }
+
+        #end-screen {
+            display: none;
+            margin-top: 80px;
+        }
+
+        .big-score {
+            font-size: 40px;
+            font-weight: bold;
+            margin: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🦴 Anatomy Click Challenge</h1>
+    <div id="question">Click START to begin!</div>
+</header>
+
+<!-- START SCREEN -->
+<div id="start-screen">
+
+    <h2>Test your anatomy knowledge!</h2>
+
+    <p>
+        A bone or muscle name will appear.<br>
+        Click where you think it is on the image.
+    </p>
+
+    <button onclick="startGame()">Start Game</button>
+
+</div>
+
+
+<!-- GAME SCREEN -->
+<div id="game-screen">
+
+    <div class="game-container">
+
+        <div class="stats">
+            <div>Score: <span id="score">0</span></div>
+            <div>Question: <span id="question-number">1</span>/<span id="total-questions">10</span></div>
+            <div>🔥 Streak: <span id="streak">0</span></div>
+        </div>
+
+        <div class="progress">
+            <div id="progress-bar"></div>
+        </div>
+
+        <div id="feedback"></div>
+
+        <div id="image-container">
+
+            <!--
+                PUT YOUR IMAGE HERE.
+
+                Rename your anatomy image to:
+                anatomy.png
+
+                Then put it in the same folder as this HTML file.
+            -->
+
+            <img
+                id="anatomy-image"
+                src="anatomy.png"
+                alt="Human anatomy diagram"
+            >
+
+            <!--
+                CLICKABLE AREAS
+
+                These are examples.
+
+                You will need to adjust their position
+                depending on your anatomy image.
+            -->
+
+            <div
+                class="click-area"
+                id="scapula"
+                onclick="checkAnswer('scapula')"
+                style="
+                    left: 35%;
+                    top: 28%;
+                    width: 15%;
+                    height: 15%;
+                ">
+            </div>
+
+            <div
+                class="click-area"
+                id="clavicle"
+                onclick="checkAnswer('clavicle')"
+                style="
+                    left: 39%;
+                    top: 22%;
+                    width: 22%;
+                    height: 7%;
+                ">
+            </div>
+
+            <div
+                class="click-area"
+                id="humerus"
+                onclick="checkAnswer('humerus')"
+                style="
+                    left: 38%;
+                    top: 31%;
+                    width: 10%;
+                    height: 24%;
+                ">
+            </div>
+
+            <div
+                class="click-area"
+                id="radius"
+                onclick="checkAnswer('radius')"
+                style="
+                    left: 43%;
+                    top: 52%;
+                    width: 6%;
+                    height: 20%;
+                ">
+            </div>
+
+            <div
+                class="click-area"
+                id="ulna"
+                onclick="checkAnswer('ulna')"
+                style="
+                    left: 48%;
+                    top: 52%;
+                    width: 6%;
+                    height: 20%;
+                ">
+            </div>
+
+            <div
+                class="click-area"
+                id="femur"
+                onclick="checkAnswer('femur')"
+                style="
+                    left: 40%;
+                    top: 63%;
+                    width: 9%;
+                    hei
+```
